@@ -3,14 +3,34 @@ import { ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View }
 import AppLoading from 'expo-app-loading';
 import { AntDesign } from '@expo/vector-icons';
 import { useFonts, BalsamiqSans_400Regular, BalsamiqSans_400Regular_Italic, BalsamiqSans_700Bold, BalsamiqSans_700Bold_Italic, } from '@expo-google-fonts/balsamiq-sans';
+import { useState } from 'react';
 //necessario instalação da font antes
 export default function App() {
   const image = require('./resources/bg.jpg') //caminho da imagem
+
+  const [tarefas, setarTarefas] = useState([
+    {
+      id: 1,
+      tarefa: 'Minha tarefa 1.'
+    },
+    {
+      id: 2,
+      tarefa: 'Minha outra tarefa.'
+    },
+    {
+      id: 3,
+      tarefa: 'Minha outra tarefa.'
+    }
+  ]);
 
   let [fontsLoaded] = useFonts({ BalsamiqSans_400Regular, BalsamiqSans_400Regular_Italic, BalsamiqSans_700Bold, BalsamiqSans_700Bold_Italic, });
   //declarção das fonts
   if (!fontsLoaded) {
     return <AppLoading />; //forçar carregamendo da fonts
+  }
+
+  function deletarTarefa(id) {
+    alert('Tarefa com id ' + id + ' foi deletada com sucesso!');
   }
 
   return (
@@ -22,16 +42,20 @@ export default function App() {
         </View>
       </ImageBackground>
 
-      <View style={styles.tarefaSingle}>
-        <View style={{ flex: 1, width: '100%', padding: 10 }}>
-          <Text>Ai dentro</Text>
-        </View>
-        <View style={{ flex: 1, alignItems: 'flex-end', padding: 10 }}>
-          <TouchableOpacity>
-            <AntDesign name="minuscircleo" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-      </View>
+      {
+        tarefas.map(function (val) {
+          return (<View style={styles.tarefaSingle}>
+            <View style={{ flex: 1, width: '100%', padding: 10 }}>
+              <Text>{val.tarefa}</Text>
+            </View>
+            <View style={{ flex: 1, alignItems: 'flex-end', padding: 10 }}>
+              <TouchableOpacity onPressIn={() => deletarTarefa(val.id)}>
+                <AntDesign name="minuscircleo" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+          </View>);
+        })
+      }
 
     </ScrollView>
   );
